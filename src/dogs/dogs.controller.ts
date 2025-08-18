@@ -1,33 +1,15 @@
-import {
-  Controller,
-  Post,
-  Get,
-  Body,
-  Param,
-  Res,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, Delete } from '@nestjs/common';
 import { DogsService } from './dogs.service';
 import { CreateDogDto } from './dto/create-dog.dto';
 import { Dog } from './interfaces/dog.interface';
-import { Response } from 'express';
 
 @Controller('dogs')
 export class DogsController {
   constructor(private dogsService: DogsService) {}
 
   @Post()
-  async create(@Body() createDogDto: CreateDogDto, @Res() res: Response) {
-    this.dogsService.create(createDogDto);
-    return res.status(HttpStatus.OK).json({
-      code: HttpStatus.OK,
-      success: true,
-      data: {
-        name: createDogDto.name,
-        age: createDogDto.age,
-      },
-      message: 'Dog created successfully',
-    });
+  async create(@Body() createDogDto: CreateDogDto) {
+    return this.dogsService.create(createDogDto);
   }
 
   @Get()
@@ -36,7 +18,12 @@ export class DogsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Dog> {
+  async findOne(@Param('id') id: number): Promise<any> {
     return this.dogsService.findOne(+id);
+  }
+
+  @Delete(':id')
+  async deleteOne(@Param('id') id: number): Promise<any> {
+    return this.dogsService.delete(+id);
   }
 }
