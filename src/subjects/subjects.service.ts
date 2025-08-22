@@ -14,6 +14,7 @@ export class SubjectsService {
 
   create(subject: Pick<Subject, 'title' | 'description'>) {
     try {
+      throw new Error('owi anjing');
       if (this.subjects.some((item) => item.title === subject.title)) {
         throw new HttpException(
           {
